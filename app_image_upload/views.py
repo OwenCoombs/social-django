@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes, parser_classes
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
+from rest_framework import viewsets
 
 
 from .models import *
@@ -54,7 +55,32 @@ def get_images(request):
   images = Image.objects.all()
   images_serialized = ImageSerializer(images, many=True)
   return Response(images_serialized.data)
+  
+  
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_post(request, pk):
+    try:
+        post = Image.objects.get(pk=pk)
+    except Image.DoesNotExist:
+        return Response({'error': 'Post not found'})
+    post.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_posts(request):
+    user = request.user
+    try:
+        profile = Profile.objects.get(user=user)
+        posts = Image.objects.filter(profile=profile)
+        serialized_post = ImageSerializer(posts, many=True)
+        return Response(serialized_post.data)
+    except Profile.DoesNotExist:
+        return Response({'error': 'Profile not found'}, status=404)
 
 
+class ImageViewSet(viewsets.ModelViewSet):
+    queryset = Image.objects.all()
+    serializer_class = ImageSerializer

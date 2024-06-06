@@ -11,3 +11,5 @@ class ImageAdmin(admin.ModelAdmin):
 
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Image, ImageAdmin)
+
+
