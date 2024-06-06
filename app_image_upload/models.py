@@ -13,6 +13,7 @@ class Profile(models.Model):
 
 
 class Image(models.Model):
+    # profile = models.ForeignKey(Profile, on_delete=models.CASCADE, default='')
     title = models.TextField()
     description = models.TextField(default='')  
     image = models.ImageField(upload_to='images/')

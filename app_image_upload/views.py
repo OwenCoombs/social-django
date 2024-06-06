@@ -67,6 +67,22 @@ def delete_post(request, pk):
     post.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_post(request, pk):
+    try:
+        post = Image.objects.get(pk=pk)
+    except Image.DoesNotExist:
+        return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = ImageSerializer(post, data=request.data)
+    
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+   
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

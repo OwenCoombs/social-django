@@ -22,7 +22,8 @@ urlpatterns = [
     path('refresh/', TokenRefreshView.as_view()),
     path('token/', TokenObtainPairView.as_view()),
     path('get-images/<int:pk>/delete/', delete_post, name='delete_post'),
-    path('user/post/<int:pk>/', user_posts),
+    path('get-images/<int:pk>/update/', update_post, name='update_post'),
+    path('user/get-images/', user_posts, name='user_post'),
     path('', include(router.urls))
 ]
 
