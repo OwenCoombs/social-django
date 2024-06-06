@@ -11,3 +11,16 @@ class Profile(models.Model):
   
 
 
+
+class Image(models.Model):
+    title = models.TextField()
+    description = models.TextField(default='')  
+    image = models.ImageField(upload_to='images/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+  
+
+
