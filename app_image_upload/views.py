@@ -71,11 +71,16 @@ def delete_post(request, pk):
 @permission_classes([IsAuthenticated])
 def update_post(request, pk):
     try:
-        post = Image.objects.get(pk=pk)
+        image = Image.objects.get(pk=pk)
     except Image.DoesNotExist:
         return Response({'error': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
     
-    serializer = ImageSerializer(post, data=request.data)
+
+    image_data = {
+        'title': request.data['title'],
+        'image': image.image
+    }
+    serializer = ImageSerializer(image, data=image_data)
     
     if serializer.is_valid():
         serializer.save()
